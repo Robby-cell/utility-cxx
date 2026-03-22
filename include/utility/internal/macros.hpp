@@ -27,6 +27,12 @@
 #define UTILITY_CONSTEXPR23 inline
 #endif
 
+#if __cpp_lib_char8_t >= 201811L
+#define UTILITY_HAS_CHAR8_T 1
+#else
+#define UTILITY_HAS_CHAR8_T 0
+#endif
+
 namespace utility {
 namespace internal {}
 } // namespace utility
