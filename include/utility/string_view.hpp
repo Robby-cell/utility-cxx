@@ -26,9 +26,7 @@ struct is_string_like_helper<
     S, void_t<decltype((std::declval<S>().data(), std::declval<S>().size()))>>
     : std::true_type {};
 
-template <class S>
-struct is_string_like
-    : std::integral_constant<bool, is_string_like_helper<S>::value> {};
+template <class S> struct is_string_like : is_string_like_helper<S> {};
 } // namespace detail
 
 template <class Char, class CharTraits = std::char_traits<Char>>
