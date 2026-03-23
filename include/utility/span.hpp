@@ -3,16 +3,6 @@
 
 #include <utility/internal/version.hpp>
 
-#if UTILITY_HAS_CPP20
-#include <span>
-
-namespace utility {
-using std::as_bytes;
-using std::as_writable_bytes;
-using std::dynamic_extent;
-using std::span;
-} // namespace utility
-#else // ^^^ UTILITY_HAS_CPP20 // VVV !UTILITY_HAS_CPP20
 #include <utility/internal/macros.hpp>
 #include <utility/types.hpp>
 #include <utility/utility.hpp>
@@ -168,6 +158,5 @@ span(Container &c) -> span<
 template <class T, std::size_t Extent> span(T (&)[Extent]) -> span<T, Extent>;
 #endif // ^^^ UTILITY_HAS_CPP17
 } // namespace utility
-#endif // ^^^ !UTILITY_HAS_CPP20
 
 #endif // UTILITY_SPAN_HPP_
