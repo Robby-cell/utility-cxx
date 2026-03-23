@@ -8,7 +8,12 @@
 #include <cstddef>
 #include <iterator>
 #include <stdexcept>
+#include <string>
 #include <type_traits>
+
+#if UTILITY_HAS_CPP17
+#include <string_view>
+#endif
 
 namespace utility {
 
@@ -181,6 +186,22 @@ public:
     }
     return npos;
   }
+
+  template <class StringCharTraits, class Allocator>
+  explicit
+  operator std::basic_string<char_type, StringCharTraits, Allocator>() const {
+    return std::basic_string<char_type, StringCharTraits, Allocator>(data(),
+                                                                     size());
+  }
+
+#if UTILITY_HAS_CPP17
+  template <class StringViewCharTraits>
+  operator std::basic_string_view<char_type, StringViewCharTraits>()
+      const noexcept {
+    return std::basic_string_view<char_type, StringViewCharTraits>(data(),
+                                                                   size());
+  }
+#endif
 
 private:
   const char_type *m_Data = nullptr;
