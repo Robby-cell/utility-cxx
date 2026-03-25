@@ -33,8 +33,4 @@
 #define UTILITY_HAS_CHAR8_T 0
 #endif
 
-namespace utility {
-namespace internal {}
-} // namespace utility
-
 #endif // UTILITY_INTERNAL_MACROS_HPP_
