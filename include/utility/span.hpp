@@ -123,27 +123,24 @@ private:
   detail::span_storage<T, Extent> m_Storage;
 };
 
-namespace detail {
 template <class T, std::size_t Extent>
-struct as_bytes_extent
-    : conditional_t<Extent == dynamic_extent,
-                    integral_constant<std::size_t, dynamic_extent>,
-                    integral_constant<std::size_t, Extent * sizeof(T)>> {};
-} // namespace detail
-
-template <class T, std::size_t Extent>
-span<const byte, detail::as_bytes_extent<T, Extent>::value>
+span<const byte,
+     (Extent == dynamic_extent) ? dynamic_extent : (Extent * sizeof(T))>
 as_bytes(span<T, Extent> s) noexcept {
-  return span<const byte, detail::as_bytes_extent<T, Extent>::value>(
-      reinterpret_cast<const byte *>(s.data()), s.size_bytes());
+  constexpr std::size_t MyExtent =
+      (Extent == dynamic_extent) ? dynamic_extent : (Extent * sizeof(T));
+  return span<const byte, MyExtent>(reinterpret_cast<const byte *>(s.data()),
+                                    s.size_bytes());
 }
 
 template <class T, std::size_t Extent>
-span<byte, detail::as_bytes_extent<T, Extent>::value>
+span<byte, (Extent == dynamic_extent) ? dynamic_extent : (Extent * sizeof(T))>
 as_writable_bytes(span<T, Extent> s) noexcept {
   static_assert(!std::is_const<T>::value, "T must not be const");
-  return span<byte, detail::as_bytes_extent<T, Extent>::value>(
-      reinterpret_cast<byte *>(s.data()), s.size_bytes());
+  constexpr std::size_t MyExtent =
+      (Extent == dynamic_extent) ? dynamic_extent : (Extent * sizeof(T));
+  return span<byte, MyExtent>(reinterpret_cast<byte *>(s.data()),
+                              s.size_bytes());
 }
 
 #if UTILITY_HAS_CPP17
