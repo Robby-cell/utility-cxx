@@ -37,7 +37,7 @@ template <class F, class = void> struct defer_scope_storage {
     }
 
     UTILITY_CONSTEXPR14 void enable() noexcept {
-        m_Enabled;
+        m_Enabled = true;
     }
 
   private:
