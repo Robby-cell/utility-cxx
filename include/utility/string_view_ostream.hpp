@@ -8,11 +8,11 @@
 namespace utility {
 
 template <class Char, class CharTraits, class StreamTraits>
-std::basic_ostream<Char, StreamTraits> &
-operator<<(std::basic_ostream<Char, StreamTraits> &os,
+std::basic_ostream<Char, StreamTraits>&
+operator<<(std::basic_ostream<Char, StreamTraits>& os,
            utility::basic_string_view<Char, CharTraits> s) {
-  os.write(s.data(), s.size());
-  return os;
+    os.write(s.data(), s.size());
+    return os;
 }
 
 } // namespace utility

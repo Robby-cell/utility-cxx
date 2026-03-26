@@ -13,16 +13,16 @@ namespace utility {
 using std::make_unique;
 #else
 template <class T, class... Args>
-enable_if_t<std::is_constructible<T, Args &&...>::value, std::unique_ptr<T>>
-make_unique(Args &&...args) {
-  auto ptr = ::operator new(sizeof(T));
-  try {
-    ::new (ptr) T(static_cast<Args &&>(args)...);
-  } catch (...) {
-    ::operator delete(ptr);
-    throw;
-  }
-  return std::unique_ptr<T>(ptr);
+enable_if_t<std::is_constructible<T, Args&&...>::value, std::unique_ptr<T>>
+make_unique(Args&&... args) {
+    auto* ptr = ::operator new(sizeof(T));
+    try {
+        ::new (ptr) T(static_cast<Args&&>(args)...);
+    } catch (...) {
+        ::operator delete(ptr);
+        throw;
+    }
+    return std::unique_ptr<T>(ptr);
 }
 #endif
 

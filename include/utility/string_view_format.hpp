@@ -10,11 +10,14 @@
 
 template <class Char, class CharTraits>
 struct std::formatter<utility::basic_string_view<Char, CharTraits>> {
-  constexpr auto parse(auto &ctx) noexcept { return ctx.begin(); }
+    constexpr auto parse(auto& ctx) noexcept {
+        return ctx.begin();
+    }
 
-  auto format(utility::basic_string_view<Char, CharTraits> s, auto &ctx) const {
-    return std::format_to_n(ctx.out(), s.size(), "{}", s.data());
-  }
+    auto format(utility::basic_string_view<Char, CharTraits> s,
+                auto& ctx) const {
+        return std::format_to_n(ctx.out(), s.size(), "{}", s.data());
+    }
 };
 #endif
 

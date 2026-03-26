@@ -5,18 +5,18 @@
 
 namespace utility {
 [[noreturn]] inline void unreachable() {
-  // Uses compiler specific extensions if possible.
-  // Even if no extension is used, undefined behavior is still raised by
-  // an empty function body and the noreturn attribute.
+    // Uses compiler specific extensions if possible.
+    // Even if no extension is used, undefined behavior is still raised by
+    // an empty function body and the noreturn attribute.
 #if defined(_MSC_VER) && !defined(__clang__) // MSVC
-  __assume(false);
+    __assume(false);
 #else // GCC, Clang
-  __builtin_unreachable();
+    __builtin_unreachable();
 #endif
 }
 
 template <class T> struct type_identity {
-  using type = T;
+    using type = T;
 };
 
 template <class T> using type_identity_t = typename type_identity<T>::type;
@@ -48,21 +48,21 @@ template <class T> using decay_t = typename std::decay<T>::type;
 template <class...> using void_t = void;
 
 struct non_copyable {
-  non_copyable() = default;
-  non_copyable(const non_copyable &) = delete;
-  non_copyable &operator=(const non_copyable &) = delete;
-  non_copyable(non_copyable &&) noexcept = default;
-  non_copyable &operator=(non_copyable &&) noexcept = default;
-  ~non_copyable() = default;
+    non_copyable() = default;
+    non_copyable(const non_copyable&) = delete;
+    non_copyable& operator=(const non_copyable&) = delete;
+    non_copyable(non_copyable&&) noexcept = default;
+    non_copyable& operator=(non_copyable&&) noexcept = default;
+    ~non_copyable() = default;
 };
 
 struct non_movable {
-  non_movable() = default;
-  non_movable(const non_movable &) = default;
-  non_movable &operator=(const non_movable &) = default;
-  non_movable(non_movable &&) noexcept = delete;
-  non_movable &operator=(non_movable &&) noexcept = delete;
-  ~non_movable() = default;
+    non_movable() = default;
+    non_movable(const non_movable&) = default;
+    non_movable& operator=(const non_movable&) = default;
+    non_movable(non_movable&&) noexcept = delete;
+    non_movable& operator=(non_movable&&) noexcept = delete;
+    ~non_movable() = default;
 };
 
 struct non_copyable_non_movable : non_copyable, non_movable {};

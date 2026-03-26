@@ -14,7 +14,7 @@ struct is_ostreamable_helper : std::false_type {};
 
 template <class T, class Os>
 struct is_ostreamable_helper<
-    T, Os, void_t<decltype(std::declval<Os &>() << std::declval<T>())>>
+    T, Os, void_t<decltype(std::declval<Os&>() << std::declval<T>())>>
     : std::true_type {};
 
 template <class T, class Os>
