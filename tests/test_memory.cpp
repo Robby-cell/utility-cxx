@@ -21,7 +21,30 @@ TEST(MemoryTest, MakeUniqueObject) {
     EXPECT_DOUBLE_EQ(ptr->b, 3.14);
 }
 
-TEST(MemoryTest, MakeUniqueArrayNotSupportedOutTheBox) {
-    // Note: C++14 make_unique supports arrays (make_unique<T[]>).
-    SUCCEED();
+TEST(MemoryTest, MakeUniqueArray) {
+    auto ptr = utility::make_unique<int[]>(5);
+    ASSERT_NE(ptr, nullptr);
+    for (std::size_t i = 0; i < 5; ++i) {
+        ptr[i] = i;
+    }
+    for (std::size_t i = 0; i < 5; ++i) {
+        EXPECT_EQ(ptr[i], i);
+    }
+}
+
+TEST(Memorytest, MakeUniqueArrayLifeTime) {
+    static int count = 0;
+    struct Lifetime {
+        Lifetime() {
+            ++count;
+        }
+        ~Lifetime() {
+            --count;
+        }
+    };
+    {
+        auto ptr = utility::make_unique<Lifetime[]>(5);
+        EXPECT_EQ(count, 5);
+    }
+    EXPECT_EQ(count, 0);
 }
