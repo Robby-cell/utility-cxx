@@ -11,8 +11,16 @@ FetchContent_Declare(
 set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(test_utility test_utility.cpp)
-target_link_libraries(test_utility PRIVATE utility::utility gtest_main)
+add_executable(utility_tests
+    test_memory.cpp
+    test_ranges_utility.cpp
+    test_scope.cpp
+    test_span.cpp
+    test_string_view.cpp
+    test_string_view_ranges.cpp
+    test_tuple.cpp
+)
+target_link_libraries(utility_tests PRIVATE utility::utility gtest_main)
 
 include(GoogleTest)
-gtest_discover_tests(test_utility)
+gtest_discover_tests(utility_tests)
