@@ -103,57 +103,85 @@ template <class F, class... ArgTypes> struct result_of<F(ArgTypes...)> {
 template <class F> using result_of_t = typename result_of<F>::type;
 
 namespace detail {
+// 1. Member function on object or reference
 template <class C, class Pointed, class Object, class... Args>
-auto invoke_memptr_impl(std::true_type /*is_mem_func*/, Pointed C::* member,
-                        Object&& object, Args&&... args)
-    -> decltype((static_cast<Object&&>(object).*
-                 member)(static_cast<Args&&>(args)...)) {
-    using object_t = typename remove_cvref<Object>::type;
-
-    // Logic: derived -> wrapped -> pointer
-    if (std::is_base_of<C, object_t>::value) {
-        return (static_cast<Object&&>(object).*
-                member)(static_cast<Args&&>(args)...);
-    } else if (is_reference_wrapper<object_t>::value) {
-        return (object.*member)(static_cast<Args&&>(args)...);
-    } else {
-        return ((static_cast<Object&&>(object)).*
-                member)(static_cast<Args&&>(args)...);
-    }
+inline enable_if_t<
+    std::is_base_of<C, decay_t<Object>>::value &&
+        std::is_function<Pointed>::value,
+    decltype((std::declval<Object>().*
+              std::declval<Pointed C::*>())(std::declval<Args>()...))>
+invoke_memptr_impl(Pointed C::* member, Object&& object, Args&&... args) {
+    return (static_cast<Object&&>(object).*
+            member)(static_cast<Args&&>(args)...);
 }
 
-template <class C, class Pointed, class Object>
-auto invoke_memptr_impl(std::false_type /*is_mem_func*/, Pointed C::* member,
-                        Object&& object)
-    -> decltype(static_cast<Object&&>(object).*member) {
-    using object_t = typename remove_cvref<Object>::type;
+// 2. Member function on reference_wrapper
+template <class C, class Pointed, class Object, class... Args>
+inline enable_if_t<
+    detail::is_reference_wrapper<decay_t<Object>>::value &&
+        std::is_function<Pointed>::value,
+    decltype((std::declval<Object>().get().*
+              std::declval<Pointed C::*>())(std::declval<Args>()...))>
+invoke_memptr_impl(Pointed C::* member, Object&& object, Args&&... args) {
+    return (object.get().*member)(static_cast<Args&&>(args)...);
+}
 
-    if (std::is_base_of<C, object_t>::value) {
-        return static_cast<Object&&>(object).*member;
-    } else if (is_reference_wrapper<object_t>::value) {
-        return object.get().*member;
-    } else {
-        return (*static_cast<Object&&>(object)).*member;
-    }
+// 3. Member function on pointer or smart pointer
+template <class C, class Pointed, class Object, class... Args>
+inline enable_if_t<
+    !std::is_base_of<C, decay_t<Object>>::value &&
+        !detail::is_reference_wrapper<decay_t<Object>>::value &&
+        std::is_function<Pointed>::value,
+    decltype(((*std::declval<Object>()).*
+              std::declval<Pointed C::*>())(std::declval<Args>()...))>
+invoke_memptr_impl(Pointed C::* member, Object&& object, Args&&... args) {
+    return ((*static_cast<Object&&>(object)).*
+            member)(static_cast<Args&&>(args)...);
+}
+
+// 4. Member data on object or reference
+template <class C, class Pointed, class Object>
+inline enable_if_t<std::is_base_of<C, decay_t<Object>>::value &&
+                       !std::is_function<Pointed>::value,
+                   decltype(std::declval<Object>().*
+                            std::declval<Pointed C::*>())>
+invoke_memptr_impl(Pointed C::* member, Object&& object) {
+    return static_cast<Object&&>(object).*member;
+}
+
+// 5. Member data on reference_wrapper
+template <class C, class Pointed, class Object>
+inline enable_if_t<detail::is_reference_wrapper<decay_t<Object>>::value &&
+                       !std::is_function<Pointed>::value,
+                   decltype(std::declval<Object>().get().*
+                            std::declval<Pointed C::*>())>
+invoke_memptr_impl(Pointed C::* member, Object&& object) {
+    return object.get().*member;
+}
+
+// 6. Member data on pointer or smart pointer
+template <class C, class Pointed, class Object>
+inline enable_if_t<!std::is_base_of<C, decay_t<Object>>::value &&
+                       !detail::is_reference_wrapper<decay_t<Object>>::value &&
+                       !std::is_function<Pointed>::value,
+                   decltype((*std::declval<Object>()).*
+                            std::declval<Pointed C::*>())>
+invoke_memptr_impl(Pointed C::* member, Object&& object) {
+    return (*static_cast<Object&&>(object)).*member;
 }
 } // namespace detail
 
 template <class F, class... Args>
-auto invoke(F&& f, Args&&... args)
-    -> enable_if_t<std::is_member_pointer<remove_cvref_t<F>>::value,
-                   result_of_t<F(Args...)>> {
-    using f_t = remove_cvref_t<F>;
-
-    // Further differentiate between member function and member data
-    using is_func = typename std::is_member_function_pointer<f_t>::type;
-    return detail::invoke_memptr_impl(is_func(), f,
-                                      static_cast<Args&&>(args)...);
+inline enable_if_t<std::is_member_pointer<decay_t<F>>::value,
+                   result_of_t<F(Args...)>>
+invoke(F&& f, Args&&... args) {
+    return detail::invoke_memptr_impl(f, static_cast<Args&&>(args)...);
 }
 
 template <class F, class... Args>
-auto invoke(F&& f, Args&&... args)
-    -> enable_if_t<!std::is_member_pointer<remove_cvref_t<F>>::value,
-                   result_of_t<F(Args...)>> {
+inline enable_if_t<!std::is_member_pointer<decay_t<F>>::value,
+                   result_of_t<F(Args...)>>
+invoke(F&& f, Args&&... args) {
     return static_cast<F&&>(f)(static_cast<Args&&>(args)...);
 }
 } // namespace utility
