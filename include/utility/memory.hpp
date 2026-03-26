@@ -15,7 +15,7 @@ using std::make_unique;
 template <class T, class... Args>
 enable_if_t<std::is_constructible<T, Args&&...>::value, std::unique_ptr<T>>
 make_unique(Args&&... args) {
-    auto* ptr = ::operator new(sizeof(T));
+    auto* ptr = reinterpret_cast<T*>(::operator new(sizeof(T)));
     try {
         ::new (ptr) T(static_cast<Args&&>(args)...);
     } catch (...) {
