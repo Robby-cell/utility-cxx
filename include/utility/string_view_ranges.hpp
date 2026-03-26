@@ -17,7 +17,7 @@ class split_view {
                 return;
             }
 
-            if (m_Remainder.data() == nullptr && m_Remainder.size() == 0) {
+            if (m_Remainder.empty()) {
                 m_IsEnd = true;
                 return;
             }
@@ -60,6 +60,7 @@ class split_view {
         reference operator*() const {
             return m_Current;
         }
+
         pointer operator->() const {
             return &m_Current;
         }
@@ -128,7 +129,7 @@ class split_char_view {
             if (m_IsEnd) {
                 return;
             }
-            if (m_Remainder.data() == nullptr && m_Remainder.size() == 0) {
+            if (m_Remainder.empty()) {
                 m_IsEnd = true;
                 return;
             }
