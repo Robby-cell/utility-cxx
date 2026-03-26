@@ -50,7 +50,7 @@ class basic_string_view {
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
     using reverse_iterator = const_reverse_iterator;
 
-    static constexpr size_type npos = static_cast<size_type>(-1);
+    enum : size_type { npos = static_cast<size_type>(-1) };
 
   public:
     basic_string_view() = default;
@@ -164,7 +164,7 @@ class basic_string_view {
         m_Size -= n;
     }
 
-    UTILITY_CONSTEXPR20 void remove_suffix(size_type n) noexcept {
+    UTILITY_CONSTEXPR20 void remove_suffix(size_type n) {
         if (n > size()) {
             throw std::out_of_range("index out of range");
         }
@@ -217,6 +217,41 @@ class basic_string_view {
                                                                        size());
     }
 #endif
+
+    UTILITY_CONSTEXPR20 int compare(basic_string_view other) const noexcept {
+        return traits_type::compare(data(), other.data(),
+                                    (std::min)(size(), other.size()));
+    }
+
+    friend UTILITY_CONSTEXPR20 bool
+    operator==(basic_string_view self, basic_string_view other) noexcept {
+        return (self.size() == other.size()) && (self.compare(other) == 0);
+    }
+
+    friend UTILITY_CONSTEXPR20 bool
+    operator!=(basic_string_view self, basic_string_view other) noexcept {
+        return !(self == other);
+    }
+
+    friend UTILITY_CONSTEXPR20 bool
+    operator<(basic_string_view self, basic_string_view other) noexcept {
+        return self.compare(other) < 0;
+    }
+
+    friend UTILITY_CONSTEXPR20 bool
+    operator<=(basic_string_view self, basic_string_view other) noexcept {
+        return self.compare(other) <= 0;
+    }
+
+    friend UTILITY_CONSTEXPR20 bool
+    operator>(basic_string_view self, basic_string_view other) noexcept {
+        return self.compare(other) > 0;
+    }
+
+    friend UTILITY_CONSTEXPR20 bool
+    operator>=(basic_string_view self, basic_string_view other) noexcept {
+        return self.compare(other) >= 0;
+    }
 
   private:
     const char_type* m_Data = nullptr;
