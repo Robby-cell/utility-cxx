@@ -2,4 +2,6 @@
 
 #include <utility/utility.hpp>
 
-TEST(UtilityTest, BasicTest) { ASSERT_TRUE(true); }
+TEST(UtilityTest, BasicTest) {
+    ASSERT_TRUE(true);
+}

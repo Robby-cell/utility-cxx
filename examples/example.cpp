@@ -3,6 +3,5 @@
 #include <iostream>
 
 int main() {
-  std::cout << "Utility library example correctly building.\n";
-  return 0;
+    std::cout << "Utility library example correctly building.\n";
 }
