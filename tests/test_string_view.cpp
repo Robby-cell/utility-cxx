@@ -1,9 +1,11 @@
 #include <gtest/gtest.h>
-#include <sstream>
-#include <unordered_map>
+
 #include <utility/string_view.hpp>
 #include <utility/string_view_hasher.hpp>
 #include <utility/string_view_ostream.hpp>
+
+#include <sstream>
+#include <unordered_map>
 
 // NOLINTNEXTLINE
 using namespace utility::string_view_literals;

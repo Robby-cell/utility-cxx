@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
+
 #include <utility/ranges.hpp>
+
 #include <vector>
 
 TEST(RangesUtilityTest, ArrayDataAndSize) {

@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
-#include <sstream>
+
 #include <utility/span.hpp>
 #include <utility/span_ostream.hpp>
+
+#include <sstream>
 #include <vector>
 
 TEST(SpanTest, ConstructFromStdVector) {

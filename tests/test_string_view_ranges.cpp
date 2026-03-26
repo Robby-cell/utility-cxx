@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
+
 #include <utility/string_view_ranges.hpp>
+
 #include <vector>
 
 // NOLINTNEXTLINE

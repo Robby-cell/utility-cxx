@@ -1,6 +1,8 @@
-#include <functional>
 #include <gtest/gtest.h>
+
 #include <utility/tuple.hpp>
+
+#include <functional>
 
 int free_func(int a, int b) {
     return a * b;
