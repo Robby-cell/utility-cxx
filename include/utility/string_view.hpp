@@ -283,7 +283,7 @@ class basic_string_view {
 
 #if UTILITY_HAS_CPP17
     template <class StringViewCharTraits>
-    operator std::basic_string_view<char_type, StringViewCharTraits>()
+    constexpr operator std::basic_string_view<char_type, StringViewCharTraits>()
         const noexcept {
         return std::basic_string_view<char_type, StringViewCharTraits>(data(),
                                                                        size());
@@ -326,7 +326,7 @@ class basic_string_view {
     }
 
   private:
-    const char_type* m_Data = nullptr;
+    char_type const* m_Data = nullptr;
     size_type m_Size = 0;
 };
 
