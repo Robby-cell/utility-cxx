@@ -27,6 +27,12 @@
 #define UTILITY_CONSTEXPR23 inline
 #endif
 
+#if UTILITY_HAS_CPP17
+#define UTILITY_NODISCARD [[nodiscard]]
+#else
+#define UTILITY_NODISCARD
+#endif
+
 #if __cpp_lib_char8_t >= 201811L
 #define UTILITY_HAS_CHAR8_T 1
 #else

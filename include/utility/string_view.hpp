@@ -1,3 +1,4 @@
+#include <algorithm>
 #ifndef UTILITY_STRING_VIEW_HPP_
 #define UTILITY_STRING_VIEW_HPP_ 1
 
@@ -16,7 +17,6 @@
 #endif
 
 namespace utility {
-
 namespace detail {
 template <class S, class = void>
 struct is_string_like_helper : std::false_type {};
@@ -27,6 +27,14 @@ struct is_string_like_helper<
     : std::true_type {};
 
 template <class S> struct is_string_like : is_string_like_helper<S> {};
+
+UTILITY_CONSTEXPR14 std::size_t sv_check(size_t size, size_t pos,
+                                         const char* s) {
+    if (pos > size) {
+        throw std::out_of_range(s);
+    }
+    return pos;
+}
 } // namespace detail
 
 template <class Char, class CharTraits = std::char_traits<Char>>
@@ -50,6 +58,9 @@ class basic_string_view {
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
     using reverse_iterator = const_reverse_iterator;
 
+    // Required for C++11 compatibility
+    // Linker error can arise if static constexpr member is used for some
+    // reason.
     enum : size_type { npos = static_cast<size_type>(-1) };
 
   public:
@@ -111,6 +122,14 @@ class basic_string_view {
         return rend();
     }
 
+    constexpr const_reference front() const noexcept {
+        return data()[0];
+    }
+
+    constexpr const_reference back() const noexcept {
+        return data()[size() - 1];
+    }
+
     constexpr const_reference operator[](size_type pos) const noexcept {
         return data()[pos];
     }
@@ -122,21 +141,39 @@ class basic_string_view {
         return operator[](pos);
     }
 
+    UTILITY_NODISCARD
     UTILITY_CONSTEXPR20 bool
     starts_with(basic_string_view prefix) const noexcept {
-        if (prefix.size() > size()) {
-            return false;
-        }
-        return traits_type::compare(data(), prefix.data(), prefix.size()) == 0;
+        return size() >= prefix.size() &&
+               traits_type::compare(data(), prefix.data(), prefix.size()) == 0;
+    }
+
+    UTILITY_NODISCARD
+    UTILITY_CONSTEXPR20 bool starts_with(char_type c) const noexcept {
+        return !empty() && traits_type::eq(front(), c);
+    }
+
+    UTILITY_NODISCARD
+    UTILITY_CONSTEXPR20 bool starts_with(const char_type* str) const {
+        return this->starts_with(basic_string_view(str));
     }
 
     UTILITY_CONSTEXPR20
     bool ends_with(basic_string_view suffix) const noexcept {
-        if (suffix.size() > size()) {
-            return false;
-        }
-        return traits_type::compare(data() + size() - suffix.size(),
-                                    suffix.data(), suffix.size()) == 0;
+        const auto len = this->size();
+        const auto that_len = suffix.size();
+        return len >= that_len &&
+               traits_type::compare(end() - len, suffix.data(), that_len) == 0;
+    }
+
+    UTILITY_NODISCARD
+    UTILITY_CONSTEXPR20 bool ends_with(const char_type* str) const {
+        return this->ends_with(basic_string_view(str));
+    }
+
+    UTILITY_NODISCARD
+    UTILITY_CONSTEXPR20 bool ends_with(char_type c) const noexcept {
+        return !empty() && traits_type::eq(back(), c);
     }
 
     UTILITY_CONSTEXPR20 basic_string_view substr(size_type pos,
@@ -183,23 +220,58 @@ class basic_string_view {
         this->swap(that);
     }
 
+    UTILITY_CONSTEXPR20
+    size_type copy(char_type* str, size_type count, size_type pos = 0) const {
+        pos = detail::sv_check(size(), pos, "copy");
+        const size_type len = std::min<size_type>(count, size() - pos);
+        traits_type::copy(str, data() + pos, len);
+        return len;
+    }
+
     UTILITY_CONSTEXPR20 size_type find(basic_string_view sub,
-                                       size_type pos = 0) const {
+                                       size_type pos = 0) const noexcept {
+        return this->find(sub.data(), pos, sub.size());
+    }
+
+    UTILITY_CONSTEXPR20 size_type find(const char_type* ptr, size_type pos,
+                                       size_type count) const {
         if (pos > size()) {
             throw std::out_of_range("index out of range");
         }
-        if (sub.empty()) {
+        if (count == 0) {
             return pos;
         }
-        if (sub.size() > size() - pos) {
+        if (count > size() - pos) {
             return npos;
         }
-        for (size_type i = pos; i <= size() - sub.size(); ++i) {
-            if (traits_type::compare(data() + i, sub.data(), sub.size()) == 0) {
+        for (size_type i = pos; i <= size() - count; ++i) {
+            if (traits_type::compare(data() + i, ptr, count) == 0) {
                 return i;
             }
         }
         return npos;
+    }
+
+    UTILITY_CONSTEXPR20 size_type find(const char_type* ptr,
+                                       size_type pos = 0) const {
+        return this->find(ptr, pos, traits_type::length(ptr));
+    }
+
+    UTILITY_CONSTEXPR20 size_type find(char_type c,
+                                       size_type pos = 0) const noexcept {
+        return this->find(&c, pos, 1);
+    }
+
+    UTILITY_CONSTEXPR20 bool contains(basic_string_view sub) const noexcept {
+        return this->find(sub) != npos;
+    }
+
+    UTILITY_CONSTEXPR20 bool contains(char_type c) const noexcept {
+        return this->find(c) != npos;
+    }
+
+    UTILITY_CONSTEXPR20 bool contains(const char_type* str) const {
+        return this->find(str) != npos;
     }
 
     template <class StringCharTraits, class Allocator>
