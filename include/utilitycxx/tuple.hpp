@@ -1,40 +1,40 @@
-#ifndef UTILITY_TUPLE_HPP_
-#define UTILITY_TUPLE_HPP_ 1
+#ifndef UTILITYCXX_TUPLE_HPP_
+#define UTILITYCXX_TUPLE_HPP_ 1
 
-#include <utility/internal/macros.hpp>
-#include <utility/internal/version.hpp>
-#include <utility/utility.hpp>
+#include <utilitycxx/internal/macros.hpp>
+#include <utilitycxx/internal/version.hpp>
+#include <utilitycxx/utility.hpp>
 
 #include <cstddef>
 #include <tuple>
 #include <type_traits>
 #include <utility>
 
-namespace utility {
+namespace utilitycxx {
 using std::make_tuple;
 using std::tie;
 using std::tuple;
 using std::tuple_element;
 using std::tuple_size;
-#if UTILITY_HAS_CPP14
+#if UTILITYCXX_HAS_CPP14
 using std::tuple_element_t;
 #else
 template <std::size_t I, class T>
 using tuple_element_t = typename tuple_element<I, T>::type;
 #endif
-} // namespace utility
+} // namespace utilitycxx
 
-#if UTILITY_HAS_CPP17
-namespace utility {
+#if UTILITYCXX_HAS_CPP17
+namespace utilitycxx {
 using std::apply;
 using std::invoke;
 using std::invoke_result;
 using std::invoke_result_t;
 using std::result_of;
 using std::result_of_t;
-} // namespace utility
-#else  // ^^^ UTILITY_HAS_CPP17 / VVV !UTILITY_HAS_CPP17
-namespace utility {
+} // namespace utilitycxx
+#else  // ^^^ UTILITYCXX_HAS_CPP17 / VVV !UTILITYCXX_HAS_CPP17
+namespace utilitycxx {
 namespace detail {
 template <class T> struct is_reference_wrapper : std::false_type {};
 template <class U>
@@ -184,7 +184,7 @@ inline enable_if_t<!std::is_member_pointer<decay_t<F>>::value,
 invoke(F&& f, Args&&... args) {
     return static_cast<F&&>(f)(static_cast<Args&&>(args)...);
 }
-} // namespace utility
-#endif // ^^^ !UTILITY_HAS_CPP17
+} // namespace utilitycxx
+#endif // ^^^ !UTILITYCXX_HAS_CPP17
 
-#endif // UTILITY_TUPLE_HPP_
+#endif // UTILITYCXX_TUPLE_HPP_

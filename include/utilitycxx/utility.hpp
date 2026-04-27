@@ -1,9 +1,9 @@
-#ifndef UTILITY_UTILITY_HPP_
-#define UTILITY_UTILITY_HPP_ 1
+#ifndef UTILITYCXX_UTILITY_HPP_
+#define UTILITYCXX_UTILITY_HPP_ 1
 
 #include <type_traits>
 
-namespace utility {
+namespace utilitycxx {
 [[noreturn]] inline void unreachable() {
     // Uses compiler specific extensions if possible.
     // Even if no extension is used, undefined behavior is still raised by
@@ -68,6 +68,6 @@ struct non_movable {
 struct non_copyable_non_movable : non_copyable, non_movable {};
 
 using std::integral_constant;
-} // namespace utility
+} // namespace utilitycxx
 
-#endif // UTILITY_UTILITY_HPP_
+#endif // UTILITYCXX_UTILITY_HPP_

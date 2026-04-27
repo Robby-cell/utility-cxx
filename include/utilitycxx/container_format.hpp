@@ -1,9 +1,9 @@
-#ifndef UTILITY_CONTAINER_FORMAT_HPP_
-#define UTILITY_CONTAINER_FORMAT_HPP_ 1
+#ifndef UTILITYCXX_CONTAINER_FORMAT_HPP_
+#define UTILITYCXX_CONTAINER_FORMAT_HPP_ 1
 
-#include <utility/format.hpp>
+#include <utilitycxx/format.hpp>
 
-namespace utility {
+namespace utilitycxx {
 
 /**
  * A reusable base class for container formatters.
@@ -14,7 +14,8 @@ namespace utility {
  */
 template <class Container, class FormatProxy> struct container_formatter {
     template <class ParseContext>
-    UTILITY_CONSTEXPR14 auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
+    UTILITYCXX_CONSTEXPR14 auto parse(ParseContext& ctx)
+        -> decltype(ctx.begin()) {
         return ctx.begin();
     }
 
@@ -26,6 +27,6 @@ template <class Container, class FormatProxy> struct container_formatter {
     }
 };
 
-} // namespace utility
+} // namespace utilitycxx
 
-#endif // UTILITY_CONTAINER_FORMAT_HPP_
+#endif // UTILITYCXX_CONTAINER_FORMAT_HPP_

@@ -1,11 +1,11 @@
-#ifndef UTILITY_RANGES_STRING_VIEW_HPP_
-#define UTILITY_RANGES_STRING_VIEW_HPP_ 1
+#ifndef UTILITYCXX_RANGES_STRING_VIEW_HPP_
+#define UTILITYCXX_RANGES_STRING_VIEW_HPP_ 1
 
-#include <utility/string_view.hpp>
+#include <utilitycxx/string_view.hpp>
 
 #include <iterator>
 
-namespace utility {
+namespace utilitycxx {
 namespace ranges {
 
 class split_view {
@@ -28,15 +28,15 @@ class split_view {
                     m_Remainder.remove_prefix(1);
                 } else {
                     m_Current = m_Remainder;
-                    m_Remainder = utility::string_view(nullptr, 0);
+                    m_Remainder = utilitycxx::string_view(nullptr, 0);
                 }
                 return;
             }
 
             auto pos = m_Remainder.find(m_Delimiter);
-            if (pos == utility::string_view::npos) {
+            if (pos == utilitycxx::string_view::npos) {
                 m_Current = m_Remainder;
-                m_Remainder = utility::string_view(nullptr, 0);
+                m_Remainder = utilitycxx::string_view(nullptr, 0);
             } else {
                 m_Current = m_Remainder.substr(0, pos);
                 m_Remainder.remove_prefix(pos + m_Delimiter.size());
@@ -45,14 +45,14 @@ class split_view {
 
       public:
         using iterator_category = std::forward_iterator_tag;
-        using value_type = utility::string_view;
+        using value_type = utilitycxx::string_view;
         using difference_type = std::ptrdiff_t;
-        using pointer = const utility::string_view*;
-        using reference = const utility::string_view&;
+        using pointer = const utilitycxx::string_view*;
+        using reference = const utilitycxx::string_view&;
 
         iterator() = default;
 
-        iterator(utility::string_view s, utility::string_view d)
+        iterator(utilitycxx::string_view s, utilitycxx::string_view d)
             : m_Remainder(s), m_Delimiter(d), m_IsEnd(false) {
             advance();
         }
@@ -98,19 +98,19 @@ class split_view {
         }
 
       private:
-        utility::string_view m_Remainder;
-        utility::string_view m_Delimiter;
-        utility::string_view m_Current;
+        utilitycxx::string_view m_Remainder;
+        utilitycxx::string_view m_Delimiter;
+        utilitycxx::string_view m_Current;
         bool m_IsEnd = true;
     };
 
   private:
-    utility::string_view str_;
-    utility::string_view delim_;
+    utilitycxx::string_view str_;
+    utilitycxx::string_view delim_;
 
   public:
     split_view() = default;
-    split_view(utility::string_view str, utility::string_view delim)
+    split_view(utilitycxx::string_view str, utilitycxx::string_view delim)
         : str_(str), delim_(delim) {}
 
     iterator begin() const {
@@ -135,12 +135,12 @@ class split_char_view {
             }
 
             char d_arr[1] = {m_Delimiter};
-            utility::string_view d(d_arr, 1);
+            utilitycxx::string_view d(d_arr, 1);
 
             auto pos = m_Remainder.find(d);
-            if (pos == utility::string_view::npos) {
+            if (pos == utilitycxx::string_view::npos) {
                 m_Current = m_Remainder;
-                m_Remainder = utility::string_view(nullptr, 0);
+                m_Remainder = utilitycxx::string_view(nullptr, 0);
             } else {
                 m_Current = m_Remainder.substr(0, pos);
                 m_Remainder.remove_prefix(pos + 1);
@@ -149,14 +149,14 @@ class split_char_view {
 
       public:
         using iterator_category = std::forward_iterator_tag;
-        using value_type = utility::string_view;
+        using value_type = utilitycxx::string_view;
         using difference_type = std::ptrdiff_t;
-        using pointer = const utility::string_view*;
-        using reference = const utility::string_view&;
+        using pointer = const utilitycxx::string_view*;
+        using reference = const utilitycxx::string_view&;
 
         iterator() = default;
 
-        iterator(utility::string_view s, char d)
+        iterator(utilitycxx::string_view s, char d)
             : m_Remainder(s), m_Delimiter(d), m_IsEnd(false) {
             advance();
         }
@@ -201,15 +201,15 @@ class split_char_view {
         }
 
       private:
-        utility::string_view m_Remainder;
-        utility::string_view m_Current;
+        utilitycxx::string_view m_Remainder;
+        utilitycxx::string_view m_Current;
         char m_Delimiter = '\0';
         bool m_IsEnd = true;
     };
 
   public:
     split_char_view() = default;
-    split_char_view(utility::string_view str, char delim)
+    split_char_view(utilitycxx::string_view str, char delim)
         : m_Str(str), m_Delimiter(delim) {}
 
     iterator begin() const {
@@ -220,19 +220,20 @@ class split_char_view {
     }
 
   private:
-    utility::string_view m_Str;
+    utilitycxx::string_view m_Str;
     char m_Delimiter = '\0';
 };
 
-inline split_view split(utility::string_view str, utility::string_view delim) {
+inline split_view split(utilitycxx::string_view str,
+                        utilitycxx::string_view delim) {
     return split_view(str, delim);
 }
 
-inline split_char_view split(utility::string_view str, char delim) {
+inline split_char_view split(utilitycxx::string_view str, char delim) {
     return split_char_view(str, delim);
 }
 
 } // namespace ranges
-} // namespace utility
+} // namespace utilitycxx
 
-#endif // UTILITY_RANGES_STRING_VIEW_HPP_
+#endif // UTILITYCXX_RANGES_STRING_VIEW_HPP_

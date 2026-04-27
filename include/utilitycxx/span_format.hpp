@@ -1,14 +1,14 @@
-#ifndef UTILITY_SPAN_FORMAT_HPP_
-#define UTILITY_SPAN_FORMAT_HPP_ 1
+#ifndef UTILITYCXX_SPAN_FORMAT_HPP_
+#define UTILITYCXX_SPAN_FORMAT_HPP_ 1
 
-#include <utility/format.hpp>
-#include <utility/span.hpp>
+#include <utilitycxx/format.hpp>
+#include <utilitycxx/span.hpp>
 
-#if UTILITY_HAS_CPP20
+#if UTILITYCXX_HAS_CPP20
 #include <format>
-#include <utility/internal/std_format_proxy.hpp> // For StdFormatProxy
+#include <utilitycxx/internal/std_format_proxy.hpp> // For StdFormatProxy
 
-namespace utility {
+namespace utilitycxx {
 namespace detail {
 template <class Context, class Char, class T, std::size_t Extent>
 inline void write_span_to_formatter(Context& ctx, span<T, Extent> s) {
@@ -18,10 +18,10 @@ inline void write_span_to_formatter(Context& ctx, span<T, Extent> s) {
     write_exact_container_type_to_formatter<span<T, Extent>, Proxy>(ctx, s);
 }
 } // namespace detail
-} // namespace utility
+} // namespace utilitycxx
 
 template <class T, std::size_t Extent, class Char>
-struct std::formatter<utility::span<T, Extent>, Char> {
+struct std::formatter<utilitycxx::span<T, Extent>, Char> {
     template <class ParseContext> constexpr auto parse(ParseContext& ctx) {
         // Return the iterator immediately (assuming no complex formatting args
         // inside {})
@@ -29,11 +29,12 @@ struct std::formatter<utility::span<T, Extent>, Char> {
     }
 
     template <class FormatContext>
-    auto format(utility::span<T, Extent> s, FormatContext& ctx) const {
-        utility::detail::write_span_to_formatter<FormatContext, Char>(ctx, s);
+    auto format(utilitycxx::span<T, Extent> s, FormatContext& ctx) const {
+        utilitycxx::detail::write_span_to_formatter<FormatContext, Char>(ctx,
+                                                                         s);
         return ctx.out();
     }
 };
 #endif
 
-#endif // UTILITY_SPAN_FORMAT_HPP_
+#endif // UTILITYCXX_SPAN_FORMAT_HPP_

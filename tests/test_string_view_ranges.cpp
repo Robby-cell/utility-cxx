@@ -1,17 +1,17 @@
 #include <gtest/gtest.h>
 
-#include <utility/string_view_ranges.hpp>
+#include <utilitycxx/string_view_ranges.hpp>
 
 #include <vector>
 
 // NOLINTNEXTLINE
-using namespace utility::string_view_literals;
+using namespace utilitycxx::string_view_literals;
 
 TEST(StringViewRangesTest, SplitByChar) {
-    utility::string_view csv = "a,b,c";
-    std::vector<utility::string_view> tokens;
+    utilitycxx::string_view csv = "a,b,c";
+    std::vector<utilitycxx::string_view> tokens;
 
-    for (auto token : utility::ranges::split(csv, ',')) {
+    for (auto token : utilitycxx::ranges::split(csv, ',')) {
         tokens.push_back(token);
     }
 
@@ -24,11 +24,11 @@ TEST(StringViewRangesTest, SplitByChar) {
 }
 
 TEST(StringViewRangesTest, SplitByStringView) {
-    utility::string_view data = "one<sep>two<sep>three";
-    utility::string_view delim = "<sep>"_sv;
-    std::vector<utility::string_view> tokens;
+    utilitycxx::string_view data = "one<sep>two<sep>three";
+    utilitycxx::string_view delim = "<sep>"_sv;
+    std::vector<utilitycxx::string_view> tokens;
 
-    for (auto token : utility::ranges::split(data, delim)) {
+    for (auto token : utilitycxx::ranges::split(data, delim)) {
         tokens.push_back(token);
     }
 
@@ -39,9 +39,9 @@ TEST(StringViewRangesTest, SplitByStringView) {
 }
 
 TEST(StringViewRangesTest, SplitEmpty) {
-    utility::string_view empty_sv = ""_sv;
+    utilitycxx::string_view empty_sv = ""_sv;
     int count = 0;
-    for (auto token : utility::ranges::split(empty_sv, ',')) {
+    for (auto token : utilitycxx::ranges::split(empty_sv, ',')) {
         count++;
     }
     EXPECT_EQ(count, 0); // No tokens for an empty string

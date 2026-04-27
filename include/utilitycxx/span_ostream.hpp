@@ -1,12 +1,10 @@
-#include "internal/detail.hpp"
-#include "utility/utility.hpp"
-#ifndef UTILITY_SPAN_OSTREAM_HPP_
-#define UTILITY_SPAN_OSTREAM_HPP_ 1
+#ifndef UTILITYCXX_SPAN_OSTREAM_HPP_
+#define UTILITYCXX_SPAN_OSTREAM_HPP_ 1
 
-#include <utility/ostream.hpp>
-#include <utility/span.hpp>
+#include <utilitycxx/ostream.hpp>
+#include <utilitycxx/span.hpp>
 
-namespace utility {
+namespace utilitycxx {
 
 namespace detail {
 template <class Char, class T, std::size_t Extent>
@@ -29,6 +27,6 @@ inline std::wostream& operator<<(std::wostream& os, span<T, Extent> s) {
     detail::write_span_to_stream(os, s);
     return os;
 }
-} // namespace utility
+} // namespace utilitycxx
 
-#endif // UTILITY_SPAN_OSTREAM_HPP_
+#endif // UTILITYCXX_SPAN_OSTREAM_HPP_

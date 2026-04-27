@@ -7,18 +7,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Define the header-only library
-add_library(utility INTERFACE)
-add_library(utility::utility ALIAS utility)
+add_library(utilitycxx INTERFACE)
+add_library(utilitycxx::utilitycxx ALIAS utilitycxx)
 
 # Include directories
-target_include_directories(utility INTERFACE
+target_include_directories(utilitycxx INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
 
 # Optional components
-option(UTILITY_BUILD_TESTS "Build the utility tests" ON)
-option(UTILITY_BUILD_EXAMPLES "Build the utility examples" ON)
+option(UTILITY_BUILD_TESTS "Build the utilitycxx tests" ON)
+option(UTILITY_BUILD_EXAMPLES "Build the utilitycxx examples" ON)
 
 if(UTILITY_BUILD_TESTS)
     enable_testing()

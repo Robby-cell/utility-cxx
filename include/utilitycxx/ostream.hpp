@@ -1,14 +1,14 @@
-#ifndef UTILITY_OSTREAM_HPP_
-#define UTILITY_OSTREAM_HPP_ 1
+#ifndef UTILITYCXX_OSTREAM_HPP_
+#define UTILITYCXX_OSTREAM_HPP_ 1
 
-#include <utility/internal/container_writer.hpp>
-#include <utility/internal/detail.hpp>
-#include <utility/utility.hpp>
+#include <utilitycxx/internal/container_writer.hpp>
+#include <utilitycxx/internal/detail.hpp>
+#include <utilitycxx/utility.hpp>
 
 #include <ios>
 #include <ostream>
 
-namespace utility {
+namespace utilitycxx {
 namespace detail {
 template <class Char, class Traits> struct ostream_writer_traits {
     using char_type = Char;
@@ -63,6 +63,6 @@ write_container_to_stream(std::basic_ostream<Char, Traits>& os,
                                                                    container);
     return os;
 }
-} // namespace utility
+} // namespace utilitycxx
 
-#endif // UTILITY_OSTREAM_HPP_
+#endif // UTILITYCXX_OSTREAM_HPP_

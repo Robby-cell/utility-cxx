@@ -1,8 +1,8 @@
-#ifndef UTILITY_STRING_VIEW_HASHER_HPP_
-#define UTILITY_STRING_VIEW_HASHER_HPP_ 1
+#ifndef UTILITYCXX_STRING_VIEW_HASHER_HPP_
+#define UTILITYCXX_STRING_VIEW_HASHER_HPP_ 1
 
-#include <utility/string_View.hpp>
-#include <utility/utility.hpp>
+#include <utilitycxx/string_View.hpp>
+#include <utilitycxx/utility.hpp>
 
 #include <cstdint>
 #include <cstring>
@@ -13,7 +13,7 @@ template <class Char> struct char_traits;
 template <class T> struct hash;
 } // namespace std
 
-namespace utility {
+namespace utilitycxx {
 
 namespace detail {
 class fast_hasher {
@@ -120,11 +120,11 @@ struct basic_string_view_hash<basic_string_view<Char, CharTraits>> {
         return detail::hash_bytes(s.data(), s.size() * sizeof(Char));
     }
 };
-} // namespace utility
+} // namespace utilitycxx
 
 template <class Char, class CharTraits>
-struct std::hash<utility::basic_string_view<Char, CharTraits>>
-    : public utility::basic_string_view_hash<
-          utility::basic_string_view<Char, CharTraits>> {};
+struct std::hash<utilitycxx::basic_string_view<Char, CharTraits>>
+    : public utilitycxx::basic_string_view_hash<
+          utilitycxx::basic_string_view<Char, CharTraits>> {};
 
-#endif // UTILITY_STRING_VIEW_HASHER_HPP_
+#endif // UTILITYCXX_STRING_VIEW_HASHER_HPP_

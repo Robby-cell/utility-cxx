@@ -1,22 +1,22 @@
+#ifndef UTILITYCXX_STRING_VIEW_HPP_
+#define UTILITYCXX_STRING_VIEW_HPP_ 1
+
+#include <utilitycxx/internal/macros.hpp>
+#include <utilitycxx/internal/version.hpp>
+#include <utilitycxx/utility.hpp>
+
 #include <algorithm>
-#ifndef UTILITY_STRING_VIEW_HPP_
-#define UTILITY_STRING_VIEW_HPP_ 1
-
-#include <utility/internal/macros.hpp>
-#include <utility/internal/version.hpp>
-#include <utility/utility.hpp>
-
 #include <cstddef>
 #include <iterator>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
 
-#if UTILITY_HAS_CPP17
+#if UTILITYCXX_HAS_CPP17
 #include <string_view>
 #endif
 
-namespace utility {
+namespace utilitycxx {
 namespace detail {
 template <class S, class = void>
 struct is_string_like_helper : std::false_type {};
@@ -28,8 +28,8 @@ struct is_string_like_helper<
 
 template <class S> struct is_string_like : is_string_like_helper<S> {};
 
-UTILITY_CONSTEXPR14 std::size_t sv_check(size_t size, size_t pos,
-                                         const char* s) {
+UTILITYCXX_CONSTEXPR14 std::size_t sv_check(size_t size, size_t pos,
+                                            const char* s) {
     if (pos > size) {
         throw std::out_of_range(s);
     }
@@ -134,31 +134,31 @@ class basic_string_view {
         return data()[pos];
     }
 
-    UTILITY_CONSTEXPR20 const_reference at(size_type pos) const {
+    UTILITYCXX_CONSTEXPR20 const_reference at(size_type pos) const {
         if (pos >= size()) {
             throw std::out_of_range("index out of range");
         }
         return operator[](pos);
     }
 
-    UTILITY_NODISCARD
-    UTILITY_CONSTEXPR20 bool
+    UTILITYCXX_NODISCARD
+    UTILITYCXX_CONSTEXPR20 bool
     starts_with(basic_string_view prefix) const noexcept {
         return size() >= prefix.size() &&
                traits_type::compare(data(), prefix.data(), prefix.size()) == 0;
     }
 
-    UTILITY_NODISCARD
-    UTILITY_CONSTEXPR20 bool starts_with(char_type c) const noexcept {
+    UTILITYCXX_NODISCARD
+    UTILITYCXX_CONSTEXPR20 bool starts_with(char_type c) const noexcept {
         return !empty() && traits_type::eq(front(), c);
     }
 
-    UTILITY_NODISCARD
-    UTILITY_CONSTEXPR20 bool starts_with(const char_type* str) const {
+    UTILITYCXX_NODISCARD
+    UTILITYCXX_CONSTEXPR20 bool starts_with(const char_type* str) const {
         return this->starts_with(basic_string_view(str));
     }
 
-    UTILITY_CONSTEXPR20
+    UTILITYCXX_CONSTEXPR20
     bool ends_with(basic_string_view suffix) const noexcept {
         const auto len = this->size();
         const auto that_len = suffix.size();
@@ -166,18 +166,18 @@ class basic_string_view {
                traits_type::compare(end() - len, suffix.data(), that_len) == 0;
     }
 
-    UTILITY_NODISCARD
-    UTILITY_CONSTEXPR20 bool ends_with(const char_type* str) const {
+    UTILITYCXX_NODISCARD
+    UTILITYCXX_CONSTEXPR20 bool ends_with(const char_type* str) const {
         return this->ends_with(basic_string_view(str));
     }
 
-    UTILITY_NODISCARD
-    UTILITY_CONSTEXPR20 bool ends_with(char_type c) const noexcept {
+    UTILITYCXX_NODISCARD
+    UTILITYCXX_CONSTEXPR20 bool ends_with(char_type c) const noexcept {
         return !empty() && traits_type::eq(back(), c);
     }
 
-    UTILITY_CONSTEXPR20 basic_string_view substr(size_type pos,
-                                                 size_type count = npos) const {
+    UTILITYCXX_CONSTEXPR20 basic_string_view
+    substr(size_type pos, size_type count = npos) const {
         if (pos > size()) {
             throw std::out_of_range("index out of range");
         }
@@ -193,7 +193,7 @@ class basic_string_view {
         return npos;
     }
 
-    UTILITY_CONSTEXPR20 void remove_prefix(size_type n) {
+    UTILITYCXX_CONSTEXPR20 void remove_prefix(size_type n) {
         if (n > size()) {
             throw std::out_of_range("index out of range");
         }
@@ -201,14 +201,14 @@ class basic_string_view {
         m_Size -= n;
     }
 
-    UTILITY_CONSTEXPR20 void remove_suffix(size_type n) {
+    UTILITYCXX_CONSTEXPR20 void remove_suffix(size_type n) {
         if (n > size()) {
             throw std::out_of_range("index out of range");
         }
         m_Size -= n;
     }
 
-    UTILITY_CONSTEXPR14 void swap(basic_string_view& that) noexcept {
+    UTILITYCXX_CONSTEXPR14 void swap(basic_string_view& that) noexcept {
         using std::swap;
         if (this != std::addressof(that)) {
             swap(m_Data, that.m_Data);
@@ -216,11 +216,11 @@ class basic_string_view {
         }
     }
 
-    UTILITY_CONSTEXPR14 void swap(basic_string_view&& that) noexcept {
+    UTILITYCXX_CONSTEXPR14 void swap(basic_string_view&& that) noexcept {
         this->swap(that);
     }
 
-    UTILITY_CONSTEXPR20
+    UTILITYCXX_CONSTEXPR20
     size_type copy(char_type* str, size_type count, size_type pos = 0) const {
         pos = detail::sv_check(size(), pos, "copy");
         const size_type len = std::min<size_type>(count, size() - pos);
@@ -228,13 +228,13 @@ class basic_string_view {
         return len;
     }
 
-    UTILITY_CONSTEXPR20 size_type find(basic_string_view sub,
-                                       size_type pos = 0) const noexcept {
+    UTILITYCXX_CONSTEXPR20 size_type find(basic_string_view sub,
+                                          size_type pos = 0) const noexcept {
         return this->find(sub.data(), pos, sub.size());
     }
 
-    UTILITY_CONSTEXPR20 size_type find(const char_type* ptr, size_type pos,
-                                       size_type count) const {
+    UTILITYCXX_CONSTEXPR20 size_type find(const char_type* ptr, size_type pos,
+                                          size_type count) const {
         if (pos > size()) {
             throw std::out_of_range("index out of range");
         }
@@ -252,25 +252,25 @@ class basic_string_view {
         return npos;
     }
 
-    UTILITY_CONSTEXPR20 size_type find(const char_type* ptr,
-                                       size_type pos = 0) const {
+    UTILITYCXX_CONSTEXPR20 size_type find(const char_type* ptr,
+                                          size_type pos = 0) const {
         return this->find(ptr, pos, traits_type::length(ptr));
     }
 
-    UTILITY_CONSTEXPR20 size_type find(char_type c,
-                                       size_type pos = 0) const noexcept {
+    UTILITYCXX_CONSTEXPR20 size_type find(char_type c,
+                                          size_type pos = 0) const noexcept {
         return this->find(&c, pos, 1);
     }
 
-    UTILITY_CONSTEXPR20 bool contains(basic_string_view sub) const noexcept {
+    UTILITYCXX_CONSTEXPR20 bool contains(basic_string_view sub) const noexcept {
         return this->find(sub) != npos;
     }
 
-    UTILITY_CONSTEXPR20 bool contains(char_type c) const noexcept {
+    UTILITYCXX_CONSTEXPR20 bool contains(char_type c) const noexcept {
         return this->find(c) != npos;
     }
 
-    UTILITY_CONSTEXPR20 bool contains(const char_type* str) const {
+    UTILITYCXX_CONSTEXPR20 bool contains(const char_type* str) const {
         return this->find(str) != npos;
     }
 
@@ -281,7 +281,7 @@ class basic_string_view {
             data(), size());
     }
 
-#if UTILITY_HAS_CPP17
+#if UTILITYCXX_HAS_CPP17
     template <class StringViewCharTraits>
     constexpr operator std::basic_string_view<char_type, StringViewCharTraits>()
         const noexcept {
@@ -290,37 +290,37 @@ class basic_string_view {
     }
 #endif
 
-    UTILITY_CONSTEXPR20 int compare(basic_string_view other) const noexcept {
+    UTILITYCXX_CONSTEXPR20 int compare(basic_string_view other) const noexcept {
         return traits_type::compare(data(), other.data(),
                                     (std::min)(size(), other.size()));
     }
 
-    friend UTILITY_CONSTEXPR20 bool
+    friend UTILITYCXX_CONSTEXPR20 bool
     operator==(basic_string_view self, basic_string_view other) noexcept {
         return (self.size() == other.size()) && (self.compare(other) == 0);
     }
 
-    friend UTILITY_CONSTEXPR20 bool
+    friend UTILITYCXX_CONSTEXPR20 bool
     operator!=(basic_string_view self, basic_string_view other) noexcept {
         return !(self == other);
     }
 
-    friend UTILITY_CONSTEXPR20 bool
+    friend UTILITYCXX_CONSTEXPR20 bool
     operator<(basic_string_view self, basic_string_view other) noexcept {
         return self.compare(other) < 0;
     }
 
-    friend UTILITY_CONSTEXPR20 bool
+    friend UTILITYCXX_CONSTEXPR20 bool
     operator<=(basic_string_view self, basic_string_view other) noexcept {
         return self.compare(other) <= 0;
     }
 
-    friend UTILITY_CONSTEXPR20 bool
+    friend UTILITYCXX_CONSTEXPR20 bool
     operator>(basic_string_view self, basic_string_view other) noexcept {
         return self.compare(other) > 0;
     }
 
-    friend UTILITY_CONSTEXPR20 bool
+    friend UTILITYCXX_CONSTEXPR20 bool
     operator>=(basic_string_view self, basic_string_view other) noexcept {
         return self.compare(other) >= 0;
     }
@@ -334,12 +334,12 @@ using string_view = basic_string_view<char>;
 using wstring_view = basic_string_view<wchar_t>;
 using u16string_view = basic_string_view<char16_t>;
 using u32string_view = basic_string_view<char32_t>;
-#if UTILITY_HAS_CHAR8_T
+#if UTILITYCXX_HAS_CHAR8_T
 using u8string_view = basic_string_view<char8_t>;
 #endif
-} // namespace utility
+} // namespace utilitycxx
 
-namespace utility {
+namespace utilitycxx {
 namespace string_view_literals {
 constexpr string_view operator""_sv(const char* str, std::size_t n) noexcept {
     return string_view(str, n);
@@ -356,13 +356,13 @@ constexpr u32string_view operator""_sv(const char32_t* str,
                                        std::size_t n) noexcept {
     return u32string_view(str, n);
 }
-#if UTILITY_HAS_CHAR8_T
+#if UTILITYCXX_HAS_CHAR8_T
 constexpr u8string_view operator""_sv(const char8_t* str,
                                       std::size_t n) noexcept {
     return u8string_view(str, n);
 }
 #endif
 } // namespace string_view_literals
-} // namespace utility
+} // namespace utilitycxx
 
-#endif // UTILITY_STRING_VIEW_HPP_
+#endif // UTILITYCXX_STRING_VIEW_HPP_

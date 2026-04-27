@@ -1,16 +1,16 @@
 #include <type_traits>
-#ifndef UTILITY_MEMORY_HPP_
-#define UTILITY_MEMORY_HPP_ 1
+#ifndef UTILITYCXX_MEMORY_HPP_
+#define UTILITYCXX_MEMORY_HPP_ 1
 
-#include <utility/internal/version.hpp>
-#include <utility/utility.hpp>
+#include <utilitycxx/internal/version.hpp>
+#include <utilitycxx/utility.hpp>
 
 #include <cstddef>
 #include <memory>
 
-namespace utility {
+namespace utilitycxx {
 
-#if UTILITY_HAS_CPP14
+#if UTILITYCXX_HAS_CPP14
 using std::make_unique;
 #else
 namespace detail {
@@ -45,6 +45,6 @@ detail::unique_ptr_array_t<T> make_unique(std::size_t count) {
                               typename std::remove_extent<T>::type[count]());
 }
 #endif
-} // namespace utility
+} // namespace utilitycxx
 
-#endif // UTILITY_MEMORY_HPP_
+#endif // UTILITYCXX_MEMORY_HPP_

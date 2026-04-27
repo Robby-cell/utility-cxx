@@ -1,9 +1,9 @@
-#ifndef UTILITY_INTERNAL_CONTAINER_WRITER_HPP_
-#define UTILITY_INTERNAL_CONTAINER_WRITER_HPP_ 1
+#ifndef UTILITYCXX_INTERNAL_CONTAINER_WRITER_HPP_
+#define UTILITYCXX_INTERNAL_CONTAINER_WRITER_HPP_ 1
 
-#include <utility/utility.hpp>
+#include <utilitycxx/utility.hpp>
 
-namespace utility {
+namespace utilitycxx {
 namespace detail {
 template <class Container, class Traits, class Writer>
 inline void
@@ -20,6 +20,6 @@ write_exact_container_type_with_traits(Writer& writer,
     }
 }
 } // namespace detail
-} // namespace utility
+} // namespace utilitycxx
 
-#endif // UTILITY_INTERNAL_CONTAINER_WRITER_HPP_
+#endif // UTILITYCXX_INTERNAL_CONTAINER_WRITER_HPP_

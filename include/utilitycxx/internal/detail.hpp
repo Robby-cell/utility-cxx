@@ -1,12 +1,12 @@
-#ifndef UTILITY_INTERNAL_DETAIL_HPP_
-#define UTILITY_INTERNAL_DETAIL_HPP_ 1
+#ifndef UTILITYCXX_INTERNAL_DETAIL_HPP_
+#define UTILITYCXX_INTERNAL_DETAIL_HPP_ 1
 
-#include <utility/utility.hpp>
+#include <utilitycxx/utility.hpp>
 
 #include <type_traits>
 #include <utility>
 
-namespace utility {
+namespace utilitycxx {
 namespace detail {
 
 template <class, class, class = void>
@@ -21,6 +21,6 @@ template <class T, class Os>
 struct is_ostreamable : is_ostreamable_helper<T, Os> {};
 
 } // namespace detail
-} // namespace utility
+} // namespace utilitycxx
 
-#endif // UTILITY_INTERNAL_DETAIL_HPP_
+#endif // UTILITYCXX_INTERNAL_DETAIL_HPP_

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <utility/memory.hpp>
+#include <utilitycxx/memory.hpp>
 
 struct MockObject {
     int a;
@@ -9,20 +9,20 @@ struct MockObject {
 };
 
 TEST(MemoryTest, MakeUniquePrimitive) {
-    auto ptr = utility::make_unique<int>(42);
+    auto ptr = utilitycxx::make_unique<int>(42);
     ASSERT_NE(ptr, nullptr);
     EXPECT_EQ(*ptr, 42);
 }
 
 TEST(MemoryTest, MakeUniqueObject) {
-    auto ptr = utility::make_unique<MockObject>(10, 3.14);
+    auto ptr = utilitycxx::make_unique<MockObject>(10, 3.14);
     ASSERT_NE(ptr, nullptr);
     EXPECT_EQ(ptr->a, 10);
     EXPECT_DOUBLE_EQ(ptr->b, 3.14);
 }
 
 TEST(MemoryTest, MakeUniqueArray) {
-    auto ptr = utility::make_unique<int[]>(5);
+    auto ptr = utilitycxx::make_unique<int[]>(5);
     ASSERT_NE(ptr, nullptr);
     for (std::size_t i = 0; i < 5; ++i) {
         ptr[i] = i;
@@ -43,7 +43,7 @@ TEST(Memorytest, MakeUniqueArrayLifeTime) {
         }
     };
     {
-        auto ptr = utility::make_unique<Lifetime[]>(5);
+        auto ptr = utilitycxx::make_unique<Lifetime[]>(5);
         EXPECT_EQ(count, 5);
     }
     EXPECT_EQ(count, 0);

@@ -1,14 +1,14 @@
-#ifndef UTILITY_FORMAT_HPP_
-#define UTILITY_FORMAT_HPP_ 1
+#ifndef UTILITYCXX_FORMAT_HPP_
+#define UTILITYCXX_FORMAT_HPP_ 1
 
-#include <utility/internal/container_writer.hpp>
-#include <utility/internal/version.hpp>
-#include <utility/string_view.hpp>
-#include <utility/string_view_format.hpp>
+#include <utilitycxx/internal/container_writer.hpp>
+#include <utilitycxx/internal/version.hpp>
+#include <utilitycxx/string_view.hpp>
+#include <utilitycxx/string_view_format.hpp>
 
 #include <ios>
 
-namespace utility {
+namespace utilitycxx {
 namespace detail {
 template <class FormatProxy> struct format_writer_traits {
     using char_type = typename FormatProxy::char_type;
@@ -18,9 +18,9 @@ template <class FormatProxy> struct format_writer_traits {
 
     static void write(writer_type writer, const char_type* s,
                       std::streamsize n) {
-        FormatProxy::print(writer,
-                           utility::basic_string_view<char_type, traits_type>{
-                               s, static_cast<size_t>(n)});
+        FormatProxy::print(
+            writer, utilitycxx::basic_string_view<char_type, traits_type>{
+                        s, static_cast<size_t>(n)});
     }
 
     static void write(writer_type writer, const char_type& c) {
@@ -54,6 +54,6 @@ inline void write_exact_container_type_to_formatter(
         writer, container);
 }
 } // namespace detail
-} // namespace utility
+} // namespace utilitycxx
 
-#endif // UTILITY_FORMAT_HPP_
+#endif // UTILITYCXX_FORMAT_HPP_

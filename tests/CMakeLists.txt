@@ -14,11 +14,11 @@ FetchContent_MakeAvailable(googletest)
 add_library(utility_tests_cpp20 OBJECT test_format_cpp20.cpp)
 
 # Force C++20 just for this target
-set_target_properties(utility_tests_cpp20 PROPERTIES 
-    CXX_STANDARD 20 
+set_target_properties(utility_tests_cpp20 PROPERTIES
+    CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
 )
-target_link_libraries(utility_tests_cpp20 PRIVATE utility::utility gtest)
+target_link_libraries(utility_tests_cpp20 PRIVATE utilitycxx::utilitycxx gtest)
 
 add_executable(utility_tests
     test_memory.cpp
@@ -35,7 +35,7 @@ set_target_properties(utility_tests PROPERTIES
 )
 
 target_link_libraries(utility_tests PRIVATE 
-    utility::utility 
+    utilitycxx::utilitycxx
     gtest_main
     utility_tests_cpp20 # Links the C++20 object files safely
 )

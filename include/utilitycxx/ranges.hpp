@@ -1,13 +1,13 @@
-#ifndef UTILITY_RANGES_HPP_
-#define UTILITY_RANGES_HPP_ 1
+#ifndef UTILITYCXX_RANGES_HPP_
+#define UTILITYCXX_RANGES_HPP_ 1
 
-#include <utility/internal/macros.hpp>
-#include <utility/internal/version.hpp>
+#include <utilitycxx/internal/macros.hpp>
+#include <utilitycxx/internal/version.hpp>
 
 #include <cstddef>
 #include <iterator>
 
-namespace utility {
+namespace utilitycxx {
 
 namespace ranges {
 struct sentinel_iterator {
@@ -21,19 +21,19 @@ struct sentinel_iterator {
         return false;
     }
 
-    sentinel_iterator& operator++() noexcept {
+    UTILITYCXX_CONSTEXPR14 sentinel_iterator& operator++() noexcept {
         return *this;
     }
 
-    sentinel_iterator operator++(int) noexcept {
+    UTILITYCXX_CONSTEXPR14 sentinel_iterator operator++(int) noexcept {
         return *this;
     }
 
-    sentinel_iterator& operator--() noexcept {
+    UTILITYCXX_CONSTEXPR14 sentinel_iterator& operator--() noexcept {
         return *this;
     }
 
-    sentinel_iterator operator--(int) noexcept {
+    UTILITYCXX_CONSTEXPR14 sentinel_iterator operator--(int) noexcept {
         return *this;
     }
 };
@@ -126,6 +126,6 @@ template <typename T, std::size_t N> constexpr T* data(T (&array)[N]) noexcept {
 }
 
 } // namespace ranges
-} // namespace utility
+} // namespace utilitycxx
 
-#endif // UTILITY_RANGES_HPP_
+#endif // UTILITYCXX_RANGES_HPP_

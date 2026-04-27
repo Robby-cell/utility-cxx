@@ -1,16 +1,16 @@
-#ifndef UTILITY_STRING_VIEW_FORMAT_HPP_
-#define UTILITY_STRING_VIEW_FORMAT_HPP_ 1
+#ifndef UTILITYCXX_STRING_VIEW_FORMAT_HPP_
+#define UTILITYCXX_STRING_VIEW_FORMAT_HPP_ 1
 
-#include <utility/internal/macros.hpp>
-#include <utility/internal/std_format_proxy.hpp>
-#include <utility/internal/version.hpp>
-#include <utility/string_view.hpp>
+#include <utilitycxx/internal/macros.hpp>
+#include <utilitycxx/internal/std_format_proxy.hpp>
+#include <utilitycxx/internal/version.hpp>
+#include <utilitycxx/string_view.hpp>
 
-namespace utility {
+namespace utilitycxx {
 template <class StringView, class FormatProxy>
 struct basic_string_view_formatter {
     template <class ParseContext>
-    UTILITY_CONSTEXPR14 auto parse(ParseContext& ctx) noexcept
+    UTILITYCXX_CONSTEXPR14 auto parse(ParseContext& ctx) noexcept
         -> decltype(ctx.begin()) {
         return ctx.begin();
     }
@@ -21,15 +21,15 @@ struct basic_string_view_formatter {
         return ctx.out();
     }
 };
-} // namespace utility
+} // namespace utilitycxx
 
-#if UTILITY_HAS_CPP20
+#if UTILITYCXX_HAS_CPP20
 #include <format>
 #include <string_view>
 
-// Standard injection for utility::string_view
+// Standard injection for utilitycxx::string_view
 template <class Char, class Traits>
-struct std::formatter<utility::basic_string_view<Char, Traits>, Char>
+struct std::formatter<utilitycxx::basic_string_view<Char, Traits>, Char>
     : private std::formatter<std::basic_string_view<Char, Traits>, Char> {
   private:
     using Base = std::formatter<std::basic_string_view<Char, Traits>, Char>;
@@ -43,17 +43,17 @@ struct std::formatter<utility::basic_string_view<Char, Traits>, Char>
     }
 
     template <class FormatContext>
-    auto format(utility::basic_string_view<Char, Traits> s,
+    auto format(utilitycxx::basic_string_view<Char, Traits> s,
                 FormatContext& ctx) const
         -> decltype(Base::format(std::basic_string_view<Char, Traits>(s.data(),
                                                                       s.size()),
                                  ctx)) {
-        // Convert utility::string_view to std::string_view so the underlying
+        // Convert utilitycxx::string_view to std::string_view so the underlying
         // formatter can print it
         return Base::format(
             std::basic_string_view<Char, Traits>(s.data(), s.size()), ctx);
     }
 };
-#endif // ^^^ UTILITY_HAS_CPP20
+#endif // ^^^ UTILITYCXX_HAS_CPP20
 
-#endif // UTILITY_STRING_VIEW_FORMAT_HPP_
+#endif // UTILITYCXX_STRING_VIEW_FORMAT_HPP_

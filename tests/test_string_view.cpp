@@ -1,34 +1,34 @@
 #include <gtest/gtest.h>
 
-#include <utility/string_view.hpp>
-#include <utility/string_view_hasher.hpp>
-#include <utility/string_view_ostream.hpp>
+#include <utilitycxx/string_view.hpp>
+#include <utilitycxx/string_view_hasher.hpp>
+#include <utilitycxx/string_view_ostream.hpp>
 
 #include <sstream>
 #include <unordered_map>
 
 // NOLINTNEXTLINE
-using namespace utility::string_view_literals;
+using namespace utilitycxx::string_view_literals;
 
 TEST(StringViewTest, LiteralAndSize) {
-    utility::string_view sv = "Hello World"_sv;
+    utilitycxx::string_view sv = "Hello World"_sv;
     EXPECT_EQ(sv.size(), 11);
     EXPECT_FALSE(sv.empty());
 }
 
 TEST(StringViewTest, SubstrAndFind) {
-    utility::string_view sv = "Hello World";
+    utilitycxx::string_view sv = "Hello World";
 
     auto sub = sv.substr(6, 5);
     EXPECT_TRUE(sub.starts_with("World"));
     EXPECT_TRUE(sv.ends_with("World"));
 
     EXPECT_EQ(sv.find("World"), 6);
-    EXPECT_EQ(sv.find("xyz"), utility::string_view::npos);
+    EXPECT_EQ(sv.find("xyz"), utilitycxx::string_view::npos);
 }
 
 TEST(StringViewTest, RemovePrefixSuffix) {
-    utility::string_view sv = "[[Payload]]";
+    utilitycxx::string_view sv = "[[Payload]]";
     sv.remove_prefix(2);
     sv.remove_suffix(2);
 
@@ -37,7 +37,7 @@ TEST(StringViewTest, RemovePrefixSuffix) {
 }
 
 TEST(StringViewTest, HasherWithUnorderedMap) {
-    std::unordered_map<utility::string_view, int> map;
+    std::unordered_map<utilitycxx::string_view, int> map;
     map["apple"_sv] = 100;
     map["banana"_sv] = 200;
 
@@ -47,7 +47,7 @@ TEST(StringViewTest, HasherWithUnorderedMap) {
 }
 
 TEST(StringViewTest, OutputStream) {
-    utility::string_view sv = "Testing output"_sv;
+    utilitycxx::string_view sv = "Testing output"_sv;
     std::ostringstream oss;
     oss << sv;
     EXPECT_EQ(oss.str(), "Testing output");

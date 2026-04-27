@@ -1,15 +1,15 @@
-#ifndef UTILITY_SCOPE_HPP_
-#define UTILITY_SCOPE_HPP_ 1
+#ifndef UTILITYCXX_SCOPE_HPP_
+#define UTILITYCXX_SCOPE_HPP_ 1
 
-#include <utility/internal/macros.hpp>
-#include <utility/internal/version.hpp>
-#include <utility/utility.hpp>
+#include <utilitycxx/internal/macros.hpp>
+#include <utilitycxx/internal/version.hpp>
+#include <utilitycxx/utility.hpp>
 
 #include <memory>
 #include <type_traits>
 #include <utility>
 
-namespace utility {
+namespace utilitycxx {
 
 namespace detail {
 template <class F, class = void> struct defer_scope_storage {
@@ -24,7 +24,7 @@ template <class F, class = void> struct defer_scope_storage {
     explicit defer_scope_storage(Func&& func, bool enabled)
         : m_Function(static_cast<Func&&>(func)), m_Enabled(enabled) {}
 
-    UTILITY_CONSTEXPR20 void operator()() {
+    UTILITYCXX_CONSTEXPR20 void operator()() {
         m_Function();
     }
 
@@ -32,11 +32,11 @@ template <class F, class = void> struct defer_scope_storage {
         return m_Enabled;
     }
 
-    UTILITY_CONSTEXPR14 void disable() noexcept {
+    UTILITYCXX_CONSTEXPR14 void disable() noexcept {
         m_Enabled = false;
     }
 
-    UTILITY_CONSTEXPR14 void enable() noexcept {
+    UTILITYCXX_CONSTEXPR14 void enable() noexcept {
         m_Enabled = true;
     }
 
@@ -59,7 +59,7 @@ struct defer_scope_storage<F, enable_if_t<std::is_empty<F>::value, void>>
     explicit defer_scope_storage(Func&& func, bool enabled)
         : F(static_cast<Func&&>(func)), m_Enabled(enabled) {}
 
-    UTILITY_CONSTEXPR20 void operator()() {
+    UTILITYCXX_CONSTEXPR20 void operator()() {
         F::operator()();
     }
 
@@ -67,11 +67,11 @@ struct defer_scope_storage<F, enable_if_t<std::is_empty<F>::value, void>>
         return m_Enabled;
     }
 
-    UTILITY_CONSTEXPR14 void disable() noexcept {
+    UTILITYCXX_CONSTEXPR14 void disable() noexcept {
         m_Enabled = false;
     }
 
-    UTILITY_CONSTEXPR14 void enable() noexcept {
+    UTILITYCXX_CONSTEXPR14 void enable() noexcept {
         m_Enabled = true;
     }
 
@@ -122,11 +122,11 @@ template <class F> class defer_scope {
         }
     }
 
-    UTILITY_CONSTEXPR14 void disable() noexcept {
+    UTILITYCXX_CONSTEXPR14 void disable() noexcept {
         m_Storage.disable();
     }
 
-    UTILITY_CONSTEXPR14 void enable() noexcept {
+    UTILITYCXX_CONSTEXPR14 void enable() noexcept {
         m_Storage.enable();
     }
 
@@ -142,6 +142,6 @@ template <class F> defer_scope<remove_cvref_t<F>> defer(F&& f) {
     return defer_scope<remove_cvref_t<F>>(static_cast<F&&>(f));
 }
 
-} // namespace utility
+} // namespace utilitycxx
 
-#endif // UTILITY_SCOPE_HPP_
+#endif // UTILITYCXX_SCOPE_HPP_

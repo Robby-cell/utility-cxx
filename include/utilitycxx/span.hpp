@@ -1,16 +1,16 @@
-#ifndef UTILITY_SPAN_HPP_
-#define UTILITY_SPAN_HPP_ 1
+#ifndef UTILITYCXX_SPAN_HPP_
+#define UTILITYCXX_SPAN_HPP_ 1
 
-#include <utility/internal/macros.hpp>
-#include <utility/internal/version.hpp>
-#include <utility/types.hpp>
-#include <utility/utility.hpp>
+#include <utilitycxx/internal/macros.hpp>
+#include <utilitycxx/internal/version.hpp>
+#include <utilitycxx/types.hpp>
+#include <utilitycxx/utility.hpp>
 
 #include <cstddef>
 #include <iterator>
 #include <type_traits>
 
-namespace utility {
+namespace utilitycxx {
 
 constexpr std::size_t dynamic_extent = static_cast<std::size_t>(-1);
 
@@ -81,7 +81,7 @@ template <class T, std::size_t Extent = dynamic_extent> class span {
         class Container,
         enable_if_t<detail::is_container_like<remove_cvref_t<Container>>::value,
                     int> = 0>
-    UTILITY_CONSTEXPR20 span(Container& c) : span(c.data(), c.size()) {}
+    UTILITYCXX_CONSTEXPR20 span(Container& c) : span(c.data(), c.size()) {}
 
     constexpr pointer data() const noexcept {
         return m_Storage.ptr;
@@ -155,7 +155,7 @@ as_writable_bytes(span<T, Extent> s) noexcept {
                                    s.size_bytes());
 }
 
-#if UTILITY_HAS_CPP17
+#if UTILITYCXX_HAS_CPP17
 template <class Container>
 span(Container& c) -> span<
     conditional_t<std::is_const<remove_reference_t<
@@ -165,7 +165,7 @@ span(Container& c) -> span<
     dynamic_extent>;
 
 template <class T, std::size_t Extent> span(T (&)[Extent]) -> span<T, Extent>;
-#endif // ^^^ UTILITY_HAS_CPP17
-} // namespace utility
+#endif // ^^^ UTILITYCXX_HAS_CPP17
+} // namespace utilitycxx
 
-#endif // UTILITY_SPAN_HPP_
+#endif // UTILITYCXX_SPAN_HPP_
