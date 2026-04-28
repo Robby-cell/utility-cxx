@@ -81,13 +81,16 @@ struct defer_scope_storage<F, enable_if_t<std::is_empty<F>::value, void>>
 
 namespace _assertions {
 static const auto _empty_lambda = []() {}; // NOLINT
-static_assert(
-    sizeof(defer_scope_storage<decltype(_empty_lambda)>) == 1,
-    "defer_scope_storage with empty lambda should take 1 byte of storage");
+static_assert(sizeof(defer_scope_storage<decltype(_empty_lambda)>) ==
+                  sizeof(bool),
+              "defer_scope_storage with empty lambda should take sizeof(bool) "
+              "byte of storage");
 
 inline void _dummy_func() {}
-static_assert(sizeof(defer_scope_storage<decltype(_dummy_func)*>) == 16,
-              "defer_scope_storage with function pointer should take 16 bytes "
+static_assert(sizeof(defer_scope_storage<decltype(_dummy_func)*>) ==
+                  (sizeof(void*) * 2),
+              "defer_scope_storage with function pointer should take "
+              "sizeof(void*)*2 bytes "
               "of storage");
 } // namespace _assertions
 } // namespace detail
@@ -115,11 +118,21 @@ template <class F> class defer_scope {
         return *this;
     }
 
-    ~defer_scope() {
+    UTILITYCXX_CONSTEXPR20 ~defer_scope() {
+        _manually_call();
+    }
+
+    // NOLINTNEXTLINE(readability-identifier-naming)
+    UTILITYCXX_CONSTEXPR20 void _manually_call() {
         if (is_enabled()) {
-            m_Storage();
-            m_Storage.disable();
+            _unsafe_call_unchecked();
+            disable();
         }
+    }
+
+    // NOLINTNEXTLINE(readability-identifier-naming)
+    UTILITYCXX_CONSTEXPR20 void _unsafe_call_unchecked() {
+        m_Storage();
     }
 
     UTILITYCXX_CONSTEXPR14 void disable() noexcept {
