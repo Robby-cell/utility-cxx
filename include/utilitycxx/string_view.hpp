@@ -5,10 +5,8 @@
 #include <utilitycxx/internal/version.hpp>
 #include <utilitycxx/utility.hpp>
 
-#include <algorithm>
 #include <cstddef>
 #include <iterator>
-#include <stdexcept>
 #include <string>
 #include <type_traits>
 
@@ -60,15 +58,14 @@ class basic_string_view {
 
     // Required for C++11 compatibility
     // Linker error can arise if static constexpr member is used for some
-    // reason.
+    // reason. Probably due to no inline being allowed.
     enum : size_type { npos = static_cast<size_type>(-1) };
 
   public:
     basic_string_view() = default;
 
     template <class String,
-              typename std::enable_if<detail::is_string_like<String>::value,
-                                      int>::type = 0>
+              enable_if_t<detail::is_string_like<String>::value, int> = 0>
     basic_string_view(const String& s)
         : basic_string_view(s.data(), s.size()) {}
 
