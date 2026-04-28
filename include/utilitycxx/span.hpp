@@ -165,6 +165,8 @@ span(Container& c) -> span<
     dynamic_extent>;
 
 template <class T, std::size_t Extent> span(T (&)[Extent]) -> span<T, Extent>;
+
+template <class T> span(T* ptr, std::size_t n) -> span<T, dynamic_extent>;
 #endif // ^^^ UTILITYCXX_HAS_CPP17
 } // namespace utilitycxx
 
